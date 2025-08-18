@@ -1,18 +1,22 @@
-require('dotenv').config()
+import dotenv from 'dotenv';
+import connectDB from './db/db.js';
+import express from 'express';
 
-const express = require('express')
-const app = express()
+dotenv.config({
+  path: './.env',
+});
 
+const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+connectDB()
+.then(() => {
+  app.listen(process.env.PORT || 5001, () => {
+    console.log(`Server is running on port ${process.env.PORT || 5001}`);
+  });
 })
+.catch((error) => {
+  console.error('Database connection failed:', error);
+});
 
-app.get('/twitter',(req,res)=>{
-res.send('Hello Twitter!')
-})
-
-app.listen(process.env.PORT, () => {
-  console.log(`Example app listening on port ${process.env.PORT}!`)
-})
+// const app = express();
 
